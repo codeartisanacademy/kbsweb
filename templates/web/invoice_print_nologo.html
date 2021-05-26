@@ -1,0 +1,354 @@
+{% extends 'base-print.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block extrastyles %}
+    <style>
+        tfoot td{
+            font-weight: 700;
+        }
+        @media print{
+            body{
+                background-color:white;
+                font-size:10px;
+            }
+            input{
+                border:none;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 4px 0;
+            }
+
+            /* Firefox */
+            input[type=number] {
+            -moz-appearance: textfield;
+            }
+
+            td, th{
+                padding:4px 0 !important;
+            }
+            th{
+                text-align:left !important;
+            }
+        }
+    </style>
+{% endblock extrastyles %}
+    
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'customers' %}">Faktur</a></li>
+<li class="breadcrumb-item">{{object.number}}</li>
+{% endblock breadcrumb %}
+    
+
+{% block title %}
+Faktur {{object.number}}
+{% endblock title %}
+    
+{% block page-title %}
+    <h4 class="page-title">Detail Faktur {{object.number}}</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col">
+                    
+                    {% if logo %}
+                        <img src="{% static 'assets/images/logo.jpeg' %}" width="400" alt="">
+                    {% endif %}
+                        
+                </div>
+                <div class="col">
+                    <div class="text-end">
+                        <p>{{object.delivery_order.created.date}}</p>
+                        <p>Kepada Yth.</p>
+                        <p>{{object.delivery_order.customer}}
+                            <br>{{object.delivery_order.customer.address}}
+                            <br>{{object.delivery_order.customer.city|default:""}}
+                            <br>{{object.delivery_order.customer.provinz|default:""}}
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h4>Faktur {{object.number}}</h4>
+                <table id="invoice-items" class="table">
+                    <thead>
+                        <tr class="text-start">
+                            <th>No.</th>
+                            <th class="text-left">Keterangan</th>
+                            <th class="text-start">Quantity</th>
+                            
+                            <th class="text-start">Harga Satuan</th>
+                            <th class="text-start">Discount (%)</th>
+                            <th class="text-end">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for item in object.invoice_items.all  %}
+                            <tr >
+                                <form action="{% url 'invoice-item-update' %}" method="post" id="form-{{item.id}}">
+                                    {% csrf_token %}
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td class="quantity" id="quantity-{{item.id}}">{{item.quantity}}</td>
+                                    <td><input type="number" disabled name="unit_price" class="price" data-id="{{item.id}}" id="price-{{item.id}}"
+                                            value="{{item.unit_price|default:0}}"></td>
+                                    <td><input type="number" disabled name="discount" class="discount" data-id="{{item.id}}" value="{{item.discount}}"
+                                            id="discount-{{item.id}}"></td>
+
+                                    <td id="total-{{item.id}}" class="total text-end">{{item.total}}</td>
+                                    <input type="hidden" disabled name="id" value="{{item.id}}">
+                                </form>
+                                
+                            </tr>
+                        {% endfor %}
+                            
+                    </tbody>
+                    <tfoot>
+                        <form method="post">
+                            {% csrf_token %}
+                            <tr class="text-end">
+                                <input type="hidden" name="id" value="{{item.invoice.id}}" >
+                                
+                            <td colspan="5" >
+                                Sub-Total
+                            </td>
+                            <td class="text-end" id="sub-total">
+                                    
+                            </td>
+                        </tr>
+                        <tr class="text-end">
+                            <td colspan="5" >
+                                 <input type="number" disabled value="{{object.discount|default:0}}" data-id="{{object.id}}" name="discount" class="d-print-none" id="discount"> Discount
+                            </td>
+                            <td colspan id="discount-amount">
+                                0
+                            </td>
+                        </tr>
+                        <tr class="text-end">
+                            <td colspan="5" >
+                                Dasar Pengenaan Pajak
+                            </td>
+                            <td id="base-total">
+                                
+                            </td>
+                        </tr>
+                        <tr class="text-end">
+                            <td colspan="5" >
+                                 <input type="number" class="d-print-none" disabled value="{{object.sales_tax|default:0}}" data-id="{{object.id}}" name="sales-tax" id="sales-tax"> PPN
+                            </td>
+                            <td id="sales-tax-amount">
+                                0
+                            </td>
+                        </tr>
+                        <tr class="text-end">
+                            <td colspan="5" >
+                                Ongkos Kirim
+                            </td>
+                            <td >
+                                <input type="number" disabled data-id="{{object.id}}" name="delivery-cost" value="{{object.delivery_cost|default:0}}" id="delivery-cost" class="text-end">
+                            </td>
+                        </tr>
+                        <tr class="text-end">
+                            <td colspan="5" >
+                                Grand Total
+                            </td>
+                            <td >
+                                <input type="number"  value="{{object.total|default:0}}" class="text-end" id="grand-total" name="total" disabled id="">
+                            </td>
+                        </tr>
+                        <tr class="text-end">
+                            <td colspan="5" >
+                                Pembulatan 
+                            </td>
+                            <td >
+                                <input type="number" disabled data-id="{{object.id}}" class="text-end" value="{{object.rounded|default:0}}" name="rounded" id="rounded-total">
+                            </td>
+                        </tr>
+                        
+                        </form>
+                        
+                    </tfoot>
+                </table>
+            </div>
+            <div class="row mt-4">
+                <div class="col-8">
+
+                </div>
+                <div class="col-4">
+                    <h5>Hormat Kami, </h5>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+
+
+{% block extrajs %}
+    <script>
+        let subTotal = 0;
+        let rounded = parseFloat('{{object.rounded}}');
+        let discountAmount = parseFloat('{{object.discount}}');
+        let salesTaxAmount = parseFloat('{{object.sales_tax}}');
+        let deliveryCost = parseFloat('{{object.delivery_cost}}');
+        let total = parseFloat('{{object.total}}');
+
+        $(document).ready(function(){
+            calculateSubTotal();
+            
+            calculateDiscountAmount($('#discount'));
+            calculateSalesTax($('#sales-tax'));
+
+            if(total===rounded){
+                console.log('sama')
+                $('rounded-total').val(total)
+            }else{
+                console.log("beda")
+                console.log(rounded)
+                $('rounded-total').val(rounded)
+            }
+        }
+            
+        )
+
+        $('#invoice-items tbody tr').change(function(){
+            let sub = parseFloat($(this).find('.quantity').text()) * parseFloat($(this).find('.price').val());
+            let disc = sub * ($(this).find('.discount').val()/100);
+            if(isNaN(sub) == false && isNaN(disc)==false){
+                $(this).find('.total').text(sub-disc);
+                calculateSubTotal();
+            }
+            
+            
+        })
+
+        function calculateSubTotal(){
+            let _subTotal = 0;
+            $('.total').each(function(){
+                _subTotal += parseFloat($(this).text());
+                if(isNaN(_subTotal)==false){
+                    $('#sub-total').text(_subTotal);
+                    subTotal = _subTotal;
+                }
+                
+            })
+            
+            calculateGrandTotal();
+        }
+
+        function calculateDiscountAmount(el){
+            let sub = $('#sub-total').text();
+            let _discountAmount = sub * ($(el).val()/100);
+            $('#discount-amount').text(_discountAmount); 
+            $('#base-total').text(sub - _discountAmount);
+            discountAmount = _discountAmount;
+            calculateGrandTotal();
+        }
+
+        $('#discount').keyup(function(){
+            calculateDiscountAmount(this);
+        })
+
+        function calculateSalesTax(el){
+            let baseAmount = parseFloat($('#base-total').text());
+            let _salesTaxAmount = (parseFloat($(el).val())/100) * baseAmount;
+            console.log(_salesTaxAmount);
+            if(isNaN(_salesTaxAmount)==false){
+                $('#sales-tax-amount').text(_salesTaxAmount);
+            }
+            salesTaxAmount = _salesTaxAmount;
+            calculateGrandTotal()
+        }
+        $('#sales-tax').keyup(function(){
+            calculateSalesTax(this)
+        })
+
+        $('#delivery-cost').keyup(function(){
+            if(isNaN(parseFloat($(this).val())==false)){
+                ;
+            }
+            deliveryCost = parseFloat($(this).val())
+            
+            calculateGrandTotal();
+        })
+
+        function calculateGrandTotal(){
+            
+            let _total = subTotal - discountAmount + salesTaxAmount + deliveryCost;
+            $('#grand-total').val(_total);
+            if(_total!==total){
+                $('#rounded-total').val(_total)
+            }else{
+                $('#rounded-total').val(rounded)
+            }
+            
+
+        }
+
+        $('.price').on('change', function(e){
+            e.preventDefault();
+            let id = $(this).data('id')
+            let cookie = document.cookie;
+            let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
+            $.ajax({
+                url: "{% url 'invoice-item-update' %}",
+                type: 'POST',
+                data: {
+                    unit_price: parseFloat($(this).val()),
+                    id: id
+                    
+                },
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                success: function(result){
+                    console.log(result);
+                },
+                error: function(xhr,errmsg,err){
+                    console.log(errmsg)
+                }
+            });
+        });
+
+        $('.discount').on('change', function(e){
+            e.preventDefault();
+            
+            let id = $(this).data('id')
+            let cookie = document.cookie;
+            let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
+            $.ajax({
+                url: "{% url 'invoice-item-update' %}",
+                type: 'POST',
+                data: {
+                    discount: parseFloat($(this).val()),
+                    id: id
+                    
+                },
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                success: function(result){
+                    console.log(result);
+                },
+                error: function(xhr,errmsg,err){
+                    console.log(errmsg)
+                }
+            });
+        });
+
+        
+    </script>
+{% endblock extrajs %}
+    

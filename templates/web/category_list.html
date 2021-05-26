@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">Categories</li>
+{% endblock breadcrumb %}
+    
+
+{% block page-title %}
+    <h4 class="page-title">Categories</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    {% include 'partials/message.html' %}
+                    <div class="text-end">
+                        <a href="{% url 'categories-add' %}" class="btn btn-primary">Add Category</a>
+                    </div>
+                    {% if object_list %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Code</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for object in object_list  %}
+                    <tr>
+                        <td>{{object.name}}</td>
+                        <td>{{object.code}}</td>
+                        
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+        
+    {% else %}
+        <p>No categories available</p>
+    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+    

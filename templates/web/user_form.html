@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'users' %}">Users</a></li>
+    <li class="breadcrumb-item">Add</li>
+{% endblock breadcrumb %}
+    
+
+{% block page-title %}
+    <h4 class="page-title">Add User</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class=""></h4>
+                    
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    
+                                    {{form|crispy}}
+                                        
+                                    
+                                    <p class="mt-4">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </p> </form>
+                            </div>
+                        </div>
+                        
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+

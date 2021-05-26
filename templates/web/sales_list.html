@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">Sales</li>
+{% endblock breadcrumb %}
+    
+
+{% block page-title %}
+    <h4 class="page-title">Sales</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    {% include 'partials/message.html' %}
+                    <div class="text-end">
+                        <a href="{% url 'sales-create' %}" class="btn btn-primary">Add Sales</a>
+                    </div>
+                    {% if object_list %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Telefon</th>
+                    <th>Alamat</th>
+                    <th>Mulai Kerja</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for object in object_list  %}
+                    <tr>
+                        <td><a href="{% url 'sales-detail' object.id %}">{{object.name}}</a></td>
+                        <td>{{object.phone}}</td>
+                        <td>{{object.address}}</td>
+                        <td>{{object.starting_date}}</td>
+                        <td><a href="{% url 'sales-update' object.id %}">Edit</a></td>
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+        <div class="pagination mt-4">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% else %}
+        <p>No sales available</p>
+    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+    

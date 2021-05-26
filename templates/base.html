@@ -1,0 +1,87 @@
+{% load static %}
+{% load groups_tags %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="{% static 'assets/css/icons.min.css' %} " rel="stylesheet" type="text/css" />
+        <link href="{% static 'assets/css/app.min.css' %}" rel="stylesheet" type="text/css" id="light-style" />
+        <link href="{% static 'assets/css/app-dark.min.css' %}" rel="stylesheet" type="text/css" id="dark-style" />    
+        
+        {% block extrastyles %}
+            
+        {% endblock extrastyles %}
+  
+    </head>
+
+    <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": false}'>
+        <!-- Begin page -->
+        <div class="wrapper">
+            {% include 'left-sidebar.html' %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+                    {% include 'topbar.html' %}
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                        
+                        <!-- start page title -->
+                        
+                        
+                            
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        
+                                        
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                        {% block breadcrumb  %}
+                                        {% endblock breadcrumb  %}
+                                           </ol> 
+                                        
+                                    </div>
+                                    {% block page-title %}
+                                        <h4 class="page-title">Dashboard</h4>
+                                    {% endblock page-title %}
+                                    
+                                </div>
+                            </div>
+                        </div>     
+                        <!-- end page title --> 
+                        
+                        {% block main %}
+                            
+                        {% endblock main %}
+                            
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+                {% include 'footer.html' %}
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+
+
+
+        <!-- bundle -->
+        <script src="{% static 'assets/js/vendor.min.js' %} "></script>
+        <script src="{% static 'assets/js/app.min.js' %} "></script>
+        
+        {% block extrajs %}
+            
+        {% endblock extrajs %}
+            
+    </body>
+</html>

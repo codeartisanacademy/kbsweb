@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">Customers</li>
+{% endblock breadcrumb %}
+    
+
+{% block page-title %}
+    <h4 class="page-title">Customers</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    {% include 'partials/message.html' %}
+                    <div class="text-end">
+                        <a href="{% url 'customers-add' %}" class="btn btn-primary">Add Customer</a>
+                    </div>
+                    {% if object_list %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Perusahaan</th>
+                    <th>Kontak</th>
+                    <th>Telefon</th>
+                    <th>Email</th>
+                    <th>Kota</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for object in object_list  %}
+                    <tr>
+                        <td><a href="{% url 'customers-detail' object.id %}">{{object.company}}</a></td>
+                        <td>{{object.contact_person}}</td>
+                        <td>{{object.phone}}</td>
+                        <td>{{object.email}}</td>
+                        <td>{{object.city}}</td>
+                        <td><a href="{% url 'customers-update' object.id %}">Edit</a></td>
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+        <div class="pagination mt-4">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% else %}
+        <p>No customers available</p>
+    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+    

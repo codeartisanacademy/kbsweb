@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{% block breadcrumb %}
+    <li class="breadcrumb-item">Laporan Omset</li>
+{% endblock breadcrumb %}
+    
+
+{% block page-title %}
+    <h4 class="page-title">Laporan Omset</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    
+                            <form method="get">
+                                {{filter.form|crispy}}
+                                <label for="singledaterange">Periode</label>
+                                <input required type="text" id="singledaterange" name="date-range" class="form-control datetimeinput"
+                                        data-toggle="date-picker" data-cancel-class="btn-warning"
+                                        >
+                                <p class="mt-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </p>
+                            </form>
+                        
+                </div>
+
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    {% include 'partials/message.html' %}
+                    
+                    {% if filter.qs %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>No. Surat Jalan</th>
+                    <th>Customer</th>
+                    <th>Jumlah</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for object in filter.qs  %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="{% url 'invoice-detail' object.id %}">{{object.number}}</a></td>
+                        <td>{{object.delivery_order.customer}}</td>
+                        <td class="total">{{object.total}}</td>
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+            <tfoot>
+                <tr class="text-end">
+                    <td colspan="3">Total</td>
+                    <td id="sum-total"></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="pagination mt-4">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% else %}
+        <p>No revenue available</p>
+    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+
+{% block extrajs %}
+    <script>
+        let sumTotal = 0;
+        $('.total').each(function (){
+            
+            sumTotal += parseFloat(this.textContent)
+            $(this).text($(this).text().toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+        })
+        $('#sum-total').text(sumTotal.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+    </script>
+    <script>
+        $(function () {
+            $(".datetimeinput").daterangepicker({
+                singleDatePicker: false,
+                startDate: new Date(),
+                showDropdowns: true,
+                locale: {
+                    format: 'Y-M-D'
+                },
+                linkedCalendars: false
+            });
+        });
+    </script>
+{% endblock extrajs %}
+    

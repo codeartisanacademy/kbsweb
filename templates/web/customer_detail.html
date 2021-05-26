@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'customers' %}">Customers</a></li>
+<li class="breadcrumb-item">{{object}}</li>
+{% endblock breadcrumb %}
+    
+
+{% block page-title %}
+    <h4 class="page-title">Detail Customer</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    {% include 'partials/message.html' %}
+                    <div class="border-bottom">
+                        <div class="dropdown float-end">
+                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="dripicons-dots-3"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" style="">
+                                <!-- item-->
+                                <a href="{% url 'customers-update' object.id %}" class="dropdown-item"><i class="mdi mdi-pencil me-1"></i>Edit</a>
+                                
+                                <!-- <a href="javascript:void(0);" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a> -->
+                                
+                            </div>
+                        </div>
+                    <h4 class="">{{object}}</h4> 
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-sm-6">
+                            <p class="mb-2">
+                                <strong>Nama Perusahaan</strong>: {{object}}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Contact Person</strong>: {{object.contact_person}}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Phone</strong>: {{object.phone}} 
+                            </p>
+                            <p class="mb-2">
+                                <strong>Fax</strong>: {{object.fax|default:""}} 
+                            </p>
+                            <p class="mb-2">
+                                <strong>Alamat</strong>: {{object.address}}, {{object.city|default:""}}, {{object.provinz|default:""}}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Termin</strong>: {{object.terms|default:""}}
+                            </p>
+                        </div>
+                    </div>
+                        
+                   
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+    

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'customers' %}">Users</a></li>
+<li class="breadcrumb-item">{{object}}</li>
+{% endblock breadcrumb %}
+    
+
+{% block page-title %}
+    <h4 class="page-title">Users</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {% include 'partials/message.html' %}
+                    <div class="border-bottom">
+                        <div class="dropdown float-end">
+                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="dripicons-dots-3"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" >
+                                <!-- item-->
+                                <a href="{% url 'users-create' %}" class="dropdown-item"><i class="mdi mdi-plus me-1"></i>Add User</a>
+                                <!-- item-->
+                                
+                            </div>
+                        </div>
+                    <h4 class="">All Users</h4> 
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    {% for u in object_list.all  %}
+                                          <tr>
+                                              <td>{{forloop.counter}}</td>
+                                              <td>{{u.first_name|default:""}} {{u.last_name|default:""}}</td>
+                                              <td>{{u.email}}</td>
+                                          </tr>  
+                                    {% endfor %}
+                                        
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                        
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+    
