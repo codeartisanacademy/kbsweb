@@ -27,7 +27,7 @@
                 <tr>
                     <th>Category</th>
                     <th>Code</th>
-                    
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,7 +36,7 @@
                     <tr>
                         <td>{{object.name}}</td>
                         <td>{{object.code}}</td>
-                        
+                        <td><a href="{% url 'categories-edit' object.id %}">Edit</a> - <a href="{% url 'categories-delete' object.id %}">Delete</a></td>
                     </tr>
                 {% endfor %}
                     

@@ -93,6 +93,16 @@ class CategoryAddView(LoginRequiredMixin, CreateView):
     success_url = '/categories/'
     fields = '__all__'
 
+class CategoryEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Category
+    success_url = '/categories/'
+    fields = '__all__'
+    success_message = 'Kategori berhasil diupdate'
+
+class CategoryDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Category
+    success_url = '/categories/'
+    success_message = 'Kategori berhasil dihapus'
 
 class DeliveryOrderCreateView(LoginRequiredMixin, CreateView):
     model = DeliveryOrder

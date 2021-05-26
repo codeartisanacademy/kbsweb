@@ -49,5 +49,7 @@ urlpatterns = [
     path('invoice-report/', views.InvoiceReportListView.as_view(), name="invoice-report"),
     path('categories/', views.CategoryListView.as_view(), name="categories"),
     path('categories/add/', views.CategoryAddView.as_view(), name="categories-add"),
+    path('categories/<int:pk>/edit/', views.CategoryEditView.as_view(), name="categories-edit"),
+    path('categories/<int:pk>/delete/', views.CategoryDeleteView.as_view(), name="categories-delete"),
 
 ]

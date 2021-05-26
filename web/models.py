@@ -51,7 +51,7 @@ class DeliveryOrder(TimeStampedModel):
     delivery_order_date = models.DateField(verbose_name="Tanggal Kirim")
     added_by = models.ForeignKey(User, related_name='delivery_orders', on_delete=models.CASCADE)
     pic = models.CharField(max_length=200, null=True, blank=True)
-    category = models.ForeignKey(Category, related_name='delivery_orders', on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey(Category, related_name='delivery_orders', on_delete=models.SET_NULL, null=True, blank=True)
     def __str__(self):
         return self.customer.company
 
