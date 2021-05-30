@@ -46,8 +46,8 @@ class DeliveryOrder(TimeStampedModel):
     class Meta:
         verbose_name = 'Surat Jalan'
 
-    customer = models.ForeignKey(Customer, related_name='delivery_orders', on_delete=models.CASCADE)
-    sales = models.ForeignKey(Sales, related_name='delivery_orders', on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, related_name='delivery_orders', on_delete=models.SET_NULL, null=True, blank=True)
+    sales = models.ForeignKey(Sales, related_name='delivery_orders', on_delete=models.SET_NULL, null=True, blank=True)
     delivery_order_date = models.DateField(verbose_name="Tanggal Kirim")
     added_by = models.ForeignKey(User, related_name='delivery_orders', on_delete=models.CASCADE)
     pic = models.CharField(max_length=200, null=True, blank=True)
@@ -125,5 +125,8 @@ def add_invoice_item(sender, instance, created, **kwargs):
     
 @receiver(post_delete, sender=Product)
 def delete_invoice_item(sender, instance, **kwargs):
-    invoice_item = InvoiceItem.objects.get(product=instance)
-    invoice_item.delete()
+    try:
+        invoice_item = InvoiceItem.objects.get(product=instance)
+        invoice_item.delete()
+    except Exception as error:
+        return

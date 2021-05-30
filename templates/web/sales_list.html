@@ -40,7 +40,7 @@
                         <td>{{object.phone}}</td>
                         <td>{{object.address}}</td>
                         <td>{{object.starting_date}}</td>
-                        <td><a href="{% url 'sales-update' object.id %}">Edit</a></td>
+                        <td><a href="{% url 'sales-update' object.id %}">Edit</a> - <a href="{% url 'sales-delete' object.id %}">Delete</a></td>
                     </tr>
                 {% endfor %}
                     

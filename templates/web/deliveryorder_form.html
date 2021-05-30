@@ -57,4 +57,17 @@
     
         
 {% endblock main %}
-    
+{% block extrajs %}
+<script>
+    $(function () {
+        $('input[name="delivery_order_date"]').daterangepicker({
+            singleDatePicker: true,
+            startDate: new Date(),
+            showDropdowns: true,
+            locale: {
+                format: 'D/M/Y'
+            }
+        });
+    });
+</script>
+{% endblock %}

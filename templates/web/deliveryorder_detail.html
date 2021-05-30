@@ -86,7 +86,7 @@
                             {% for p in object.products.all  %}
                                 <tr>
                                     <td>{{forloop.counter}}</td>
-                                    <td>{{p.quantity}} {{p.metric_type}} {{p.name}} @ {{p.unit_quantity}}</td>
+                                    <td>{{p.quantity}} {{p.metric_type}} {{p.name}} @ {{p.unit_quantity}} {{p.unit_metric}}</td>
                                     <td>{{p.total}}</td>
                                     <td>
                                         <form action="{% url 'do-product-delete' p.id%}" method="post">

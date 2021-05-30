@@ -44,6 +44,10 @@ class CustomerUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('customers-detail', kwargs={'pk':self.kwargs['pk']})
 
+class CustomerDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Customer
+    success_message = "Customer has been deleted"
+    success_url = '/customers/'
 
 class SalesCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Sales
@@ -84,6 +88,11 @@ class SalesUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         form.fields['starting_date'].input_formats = ['%d/%m/%Y']
 
         return form 
+
+class SalesDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Sales
+    success_message = "Sales telah berhasil dihapus"
+    success_url = '/sales/'
 
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
