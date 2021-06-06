@@ -193,6 +193,10 @@ class DeliveryOrderProductDeleteView(LoginRequiredMixin, SuccessMessageMixin, De
     def get_success_url(self, **kwargs):
         return reverse_lazy('delivery-order-detail', kwargs={'pk':self.object.delivery_order.id})
 
+class DeliveryOrderPrintView(LoginRequiredMixin, DetailView):
+    model = model = DeliveryOrder
+    template_name = 'web/deliveryorder_print.html'
+
 class InvoiceListView(LoginRequiredMixin, ListView):
     model = Invoice 
     paginate_by = 20

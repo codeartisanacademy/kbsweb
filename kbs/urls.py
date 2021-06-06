@@ -34,6 +34,7 @@ urlpatterns = [
     path('sales/<int:pk>/delete', views.SalesDeleteView.as_view(), name='sales-delete'),
     path('delivery-orders/', views.DeliveryOrderListView.as_view(), name='delivery-orders'),
     path('delivery-orders/<int:pk>/detail/', views.DeliveryOrderDetailView.as_view(), name='delivery-order-detail'),
+    path('delivery-orders/<int:pk>/print/', views.DeliveryOrderPrintView.as_view(), name='delivery-order-print'),
     path('delivery-orders/<int:pk>/edit/', views.DeliveryOrderEditView.as_view(), name='delivery-order-edit'),
     path('delivery-orders/<int:pk>/delete/', views.DeliveryOrderDeleteView.as_view(), name='delivery-order-delete'),
     path('delivery-orders/<int:pk>/delete-product/', views.DeliveryOrderProductDeleteView.as_view(), name='do-product-delete'),

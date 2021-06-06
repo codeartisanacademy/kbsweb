@@ -1,0 +1,124 @@
+{% extends 'base-print.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block extrastyles %}
+    <style>
+        tfoot td{
+            font-weight: 700;
+        }
+        @media print{
+            body{
+                background-color:white;
+                font-size:10px;
+                color:black !important;
+            }
+            input{
+                border:none;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 4px 0;
+            }
+
+            /* Firefox */
+            input[type=number] {
+            -moz-appearance: textfield;
+            }
+
+            td, th{
+                padding:4px 0 !important;
+            }
+            th{
+                text-align:left !important;
+            }
+        }
+    </style>
+{% endblock extrastyles %}
+    
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'customers' %}">Surat Jalan</a></li>
+<li class="breadcrumb-item">{{object.number}}</li>
+{% endblock breadcrumb %}
+    
+
+{% block title %}
+Surat Jalan {{object}}
+{% endblock title %}
+    
+{% block page-title %}
+    <h4 class="page-title">Detail Surat Jalan {{object.number}}</h4>
+{% endblock page-title %}
+    
+
+
+{% block main %}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col">
+                    
+                    {% if logo %}
+                        <img src="{% static 'assets/images/logo.jpeg' %}" width="400" alt="">
+                    {% endif %}
+                        
+                </div>
+                <div class="col">
+                    <div class="text-end">
+                        <p>{{object.created.date}}</p>
+                        <p>Kepada Yth.</p>
+                        <p>{{object.delivery_order.customer}}
+                            <br>{{object.customer.address}}
+                            <br>{{object.customer.city|default:""}}
+                            <br>{{object.customer.provinz|default:""}}
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <table id="invoice-items" class="table" style="color:black !important;">
+                    <thead>
+                        <tr class="text-start">
+                            <th>No.</th>
+                            <th class="text-left">Keterangan</th>
+                            <th class="text-start">Banyaknya</th>
+                            
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for p in object.products.all  %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{p.name}} @ {{p.unit_quantity}} {{p.unit_metric}}</td>
+                                    <td>{{p.total}}</td>
+                                    
+                                </tr>
+                            {% endfor %}
+                            
+                    </tbody>
+                    
+                </table>
+            </div>
+            <div class="row mt-4">
+                <div class="col-6">
+                    <h5>Tanda Terima</h5>
+                </div>
+                <div class="col-6">
+                    <h5>Hormat Kami, </h5>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+        
+{% endblock main %}
+
+
+
+    
