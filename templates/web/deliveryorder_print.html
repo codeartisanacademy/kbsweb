@@ -1,6 +1,7 @@
 {% extends 'base-print.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load humanize %}
 {% block extrastyles %}
     <style>
         tfoot td{
@@ -65,9 +66,9 @@ Surat Jalan {{object}}
                 </div>
                 <div class="col">
                     <div class="text-end">
-                        <p>{{object.created.date}}</p>
+                        <p>{{object.created.date|date:"d F Y"}}</p>
                         <p>Kepada Yth.</p>
-                        <p>{{object.delivery_order.customer}}
+                        <p>{{object.customer}}
                             <br>{{object.customer.address}}
                             <br>{{object.customer.city|default:""}}
                             <br>{{object.customer.provinz|default:""}}
@@ -93,8 +94,8 @@ Surat Jalan {{object}}
                         {% for p in object.products.all  %}
                                 <tr>
                                     <td>{{forloop.counter}}</td>
-                                    <td>{{p.name}} @ {{p.unit_quantity}} {{p.unit_metric}}</td>
-                                    <td>{{p.total}}</td>
+                                    <td>{{p.quantity}} {{p.metric_type|title}} {{p.name}} @ {{p.unit_quantity}} {{p.unit_metric}}</td>
+                                    <td>{{p.total|intcomma}} {{p.unit_metric}}</td>
                                     
                                 </tr>
                             {% endfor %}
@@ -107,7 +108,7 @@ Surat Jalan {{object}}
                 <div class="col-6">
                     <h5>Tanda Terima</h5>
                 </div>
-                <div class="col-6">
+                <div class="col-6 text-center">
                     <h5>Hormat Kami, </h5>
                 </div>
                 

@@ -197,6 +197,13 @@ class DeliveryOrderPrintView(LoginRequiredMixin, DetailView):
     model = model = DeliveryOrder
     template_name = 'web/deliveryorder_print.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["logo"] = self.request.GET.get("logo")
+        print(context['logo'])
+        return context
+    
+
 class InvoiceListView(LoginRequiredMixin, ListView):
     model = Invoice 
     paginate_by = 20

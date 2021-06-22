@@ -28,6 +28,7 @@
                                 <!-- item-->
                                 <a href="{% url 'delivery-order-delete' object.id %}" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a>
                                 <a href="{% url 'delivery-order-print' object.id %}" target="_blank" class="dropdown-item"><i class="mdi mdi-printer me-1"></i>Print</a>
+                                <a href="{% url 'delivery-order-print' object.id %}?logo=true" target="_blank" class="dropdown-item"><i class="mdi mdi-printer me-1"></i>Print With Logo</a>
                                 
                             </div>
                         </div>

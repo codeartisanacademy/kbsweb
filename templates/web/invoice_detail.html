@@ -83,7 +83,7 @@
                                     <form action="{% url 'invoice-item-update' %}" method="post" id="form-{{item.id}}">
                                         {% csrf_token %}
                                         <td>{{item.description}}</td>
-                                        <td class="quantity" id="quantity-{{item.id}}">{{item.quantity}}</td>
+                                        <td class="quantity" id="quantity-{{item.id}}">{{item.product.total}}</td>
                                         <td><input type="number" disabled name="unit_price" class="price" data-id="{{item.id}}" id="price-{{item.id}}"
                                                 value="{{item.unit_price|default:0}}"></td>
                                         <td><input type="number" disabled name="discount" class="discount" data-id="{{item.id}}" value="{{item.discount}}"

@@ -1,6 +1,7 @@
 {% extends 'base-print.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load humanize %}
 {% block extrastyles %}
     <style>
         tfoot td{
@@ -64,7 +65,7 @@ Faktur {{object.number}}
                 </div>
                 <div class="col">
                     <div class="text-end">
-                        <p>{{object.delivery_order.created.date}}</p>
+                        <p>{{object.delivery_order.created.date|date:"d F Y"}}</p>
                         <p>Kepada Yth.</p>
                         <p>{{object.delivery_order.customer}}
                             <br>{{object.delivery_order.customer.address}}
@@ -104,7 +105,7 @@ Faktur {{object.number}}
                                     <td><input type="number" disabled name="discount" class="discount" data-id="{{item.id}}" value="{{item.discount}}"
                                             id="discount-{{item.id}}"></td>
 
-                                    <td id="total-{{item.id}}" class="total text-end">{{item.total}}</td>
+                                    <td id="total-{{item.id}}" class="total text-end">{{item.total|intcomma}}</td>
                                     <input type="hidden" disabled name="id" value="{{item.id}}">
                                 </form>
                                 

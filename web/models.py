@@ -105,7 +105,8 @@ class InvoiceItem(TimeStampedModel):
     
     def __str__(self):
         return "{0} - {1}".format(self.invoice.id, self.description)
-    
+
+   
     @property
     def total(self):
         sub = self.quantity * self.unit_price
