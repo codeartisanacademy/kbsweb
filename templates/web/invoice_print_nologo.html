@@ -100,12 +100,12 @@ Faktur {{object.number}}
                                     <td>{{forloop.counter}}</td>
                                     <td>{{item.description}}</td>
                                     <td class="quantity" id="quantity-{{item.id}}">{{item.quantity}}</td>
-                                    <td><input type="number" disabled name="unit_price" class="price" data-id="{{item.id}}" id="price-{{item.id}}"
+                                    <td>{{item.unit_price.normalize|intcomma|default:0}}<input type="hidden" disabled name="unit_price" class="price" data-id="{{item.id}}" id="price-{{item.id}}"
                                             value="{{item.unit_price|default:0}}"></td>
-                                    <td><input type="number" disabled name="discount" class="discount" data-id="{{item.id}}" value="{{item.discount}}"
+                                    <td>{{item.discount}}<input type="hidden" disabled name="discount" class="discount" data-id="{{item.id}}" value="{{item.discount}}"
                                             id="discount-{{item.id}}"></td>
 
-                                    <td id="total-{{item.id}}" class="total text-end">{{item.total|intcomma}}</td>
+                                    <td id="total-{{item.id}}" class="total text-end" data-total={{item.total}}>{{item.total.normalize|intcomma}}</td>
                                     <input type="hidden" disabled name="id" value="{{item.id}}">
                                 </form>
                                 
@@ -128,7 +128,7 @@ Faktur {{object.number}}
                         </tr>
                         <tr class="text-end">
                             <td colspan="5" >
-                                 <input type="number" disabled value="{{object.discount|default:0}}" data-id="{{object.id}}" name="discount" class="d-print-none" id="discount"> Discount
+                                 <input type="hidden" disabled value="{{object.discount|default:0}}" data-id="{{object.id}}" name="discount" class="d-print-none" id="discount"> Discount: {{object.discount|default:0}}%
                             </td>
                             <td colspan id="discount-amount">
                                 0
@@ -144,7 +144,7 @@ Faktur {{object.number}}
                         </tr>
                         <tr class="text-end">
                             <td colspan="5" >
-                                 <input type="number" class="d-print-none" disabled value="{{object.sales_tax|default:0}}" data-id="{{object.id}}" name="sales-tax" id="sales-tax"> PPN
+                                 <input type="hidden" class="d-print-none" disabled value="{{object.sales_tax|default:0}}" data-id="{{object.id}}" name="sales-tax" id="sales-tax"> PPN: {{object.sales_tax|default:0}}%
                             </td>
                             <td id="sales-tax-amount">
                                 0
@@ -154,8 +154,8 @@ Faktur {{object.number}}
                             <td colspan="5" >
                                 Ongkos Kirim
                             </td>
-                            <td >
-                                <input type="number" disabled data-id="{{object.id}}" name="delivery-cost" value="{{object.delivery_cost|default:0}}" id="delivery-cost" class="text-end">
+                            <td >{{object.delivery_cost.normalize|intcomma|default:0}}
+                                <input type="hidden" disabled data-id="{{object.id}}" name="delivery-cost" value="{{object.delivery_cost|default:0}}" id="delivery-cost" class="text-end">
                             </td>
                         </tr>
                         <tr class="text-end">
@@ -163,7 +163,8 @@ Faktur {{object.number}}
                                 Grand Total
                             </td>
                             <td >
-                                <input type="number"  value="{{object.total|default:0}}" class="text-end" id="grand-total" name="total" disabled id="">
+                                {{object.total.normalize|intcomma|default:0}}
+                                <input type="hidden"  value="{{object.total|default:0}}" class="text-end" id="grand-total" name="total" disabled id="">
                             </td>
                         </tr>
                         <tr class="text-end">
@@ -171,7 +172,8 @@ Faktur {{object.number}}
                                 Pembulatan 
                             </td>
                             <td >
-                                <input type="number" disabled data-id="{{object.id}}" class="text-end" value="{{object.rounded|default:0}}" name="rounded" id="rounded-total">
+                                {{object.rounded.normalize|intcomma|default:0}}
+                                <input type="hidden" disabled data-id="{{object.id}}" class="text-end" value="{{object.rounded|default:0}}" name="rounded" id="rounded-total">
                             </td>
                         </tr>
                         
@@ -238,10 +240,11 @@ Faktur {{object.number}}
         function calculateSubTotal(){
             let _subTotal = 0;
             $('.total').each(function(){
-                _subTotal += parseFloat($(this).text());
+                _subTotal += parseFloat($(this).data('total'));
                 if(isNaN(_subTotal)==false){
-                    $('#sub-total').text(_subTotal);
-                    subTotal = _subTotal;
+                    
+                    subTotal = _subTotal ;
+                    $('#sub-total').text(new Intl.NumberFormat().format(_subTotal));
                 }
                 
             })
@@ -250,10 +253,11 @@ Faktur {{object.number}}
         }
 
         function calculateDiscountAmount(el){
-            let sub = $('#sub-total').text();
+            let sub = parseFloat($('#sub-total').text().replace(/,/g, ''));
+            console.log(sub)
             let _discountAmount = sub * ($(el).val()/100);
-            $('#discount-amount').text(_discountAmount); 
-            $('#base-total').text(sub - _discountAmount);
+            $('#discount-amount').text(new Intl.NumberFormat().format(_discountAmount)); 
+            $('#base-total').text(new Intl.NumberFormat().format(sub - _discountAmount));
             discountAmount = _discountAmount;
             calculateGrandTotal();
         }
@@ -263,11 +267,10 @@ Faktur {{object.number}}
         })
 
         function calculateSalesTax(el){
-            let baseAmount = parseFloat($('#base-total').text());
+            let baseAmount = parseFloat($('#base-total').text().replace(/,/g, ''));
             let _salesTaxAmount = (parseFloat($(el).val())/100) * baseAmount;
-            console.log(_salesTaxAmount);
             if(isNaN(_salesTaxAmount)==false){
-                $('#sales-tax-amount').text(_salesTaxAmount);
+                $('#sales-tax-amount').text(new Intl.NumberFormat().format(_salesTaxAmount));
             }
             salesTaxAmount = _salesTaxAmount;
             calculateGrandTotal()

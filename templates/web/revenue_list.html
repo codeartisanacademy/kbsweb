@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load humanize %}
 {% load crispy_forms_tags %}
 {% block breadcrumb %}
     <li class="breadcrumb-item">Laporan Omset</li>
@@ -35,7 +35,19 @@
             <div class="card">
                 <div class="card-body">
                     {% include 'partials/message.html' %}
-                    
+                    <div class="border-bottom">
+                        <div class="dropdown float-end d-print-none">
+                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="dripicons-dots-3"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" >
+                                <a href="#" onclick="window.print()"  class="dropdown-item"><i class="mdi mdi-printer me-1"></i>Print</a>
+                                <!-- <a href="javascript:void(0);" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a> -->
+                                
+                            </div>
+                        </div> 
+                    <h4 class="">Omset</h4> 
+                    </div>  
                     {% if filter.qs %}
         <table class="table table-striped">
             <thead>
@@ -53,7 +65,7 @@
                         <td>{{forloop.counter}}</td>
                         <td><a href="{% url 'invoice-detail' object.id %}">{{object.number}}</a></td>
                         <td>{{object.delivery_order.customer}}</td>
-                        <td class="total">{{object.total}}</td>
+                        <td class="total" data-total='{{object.total.normalize|default:0}}'>{{object.total.normalize|intcomma|default:0}}</td>
                     </tr>
                 {% endfor %}
                     
@@ -97,11 +109,12 @@
     <script>
         let sumTotal = 0;
         $('.total').each(function (){
-            
-            sumTotal += parseFloat(this.textContent)
+            sumTotal += parseFloat(this.dataset.total)
+            console.log(sumTotal)
             $(this).text($(this).text().toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
         })
-        $('#sum-total').text(sumTotal.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+        console.log(sumTotal)
+        $('#sum-total').text(new Intl.NumberFormat().format(sumTotal));
     </script>
     <script>
         $(function () {

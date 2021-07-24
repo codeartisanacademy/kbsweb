@@ -36,7 +36,19 @@
             <div class="card">
                 <div class="card-body">
                     {% include 'partials/message.html' %}
-                    
+                    <div class="border-bottom">
+                        <div class="dropdown float-end d-print-none">
+                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="dripicons-dots-3"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" >
+                                <a href="#" onclick="window.print()"  class="dropdown-item"><i class="mdi mdi-printer me-1"></i>Print</a>
+                                <!-- <a href="javascript:void(0);" class="dropdown-item"><i class="mdi mdi-delete me-1"></i>Delete</a> -->
+                                
+                            </div>
+                        </div> 
+                    <h4 class="">Tagihan</h4> 
+                    </div>  
                     {% if object_list %}
                     
         <table class="table table-striped">

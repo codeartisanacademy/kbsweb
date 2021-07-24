@@ -110,6 +110,7 @@ class InvoiceItem(TimeStampedModel):
     @property
     def total(self):
         sub = self.quantity * self.unit_price
+        print(sub)
         discount =  sub * decimal.Decimal((self.discount/100))
         return round(sub - discount,2)
 

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load humanize %}
 {% block extrastyles %}
     <style>
         tfoot td{
@@ -84,11 +85,11 @@
                                         <td>{{item.description}}</td>
                                         <td class="quantity" id="quantity-{{item.id}}">{{item.quantity}}</td>
                                         <td><input type="number" name="unit_price" class="price" data-id="{{item.id}}" id="price-{{item.id}}"
-                                                value="{{item.unit_price|default:0}}"></td>
+                                                value="{{item.unit_price.normalize|default:0}}"></td>
                                         <td><input type="number" name="discount" class="discount" data-id="{{item.id}}" value="{{item.discount}}"
                                                 id="discount-{{item.id}}"></td>
 
-                                        <td id="total-{{item.id}}" class="total text-end">{{item.total}}</td>
+                                        <td id="total-{{item.id}}" class="total text-end" data-total={{item.total}}>{{item.total.normalize|intcomma}}</td>
                                         <input type="hidden" name="id" value="{{item.id}}">
                                     </form>
                                     
@@ -137,7 +138,7 @@
                                     Ongkos Kirim
                                 </td>
                                 <td >
-                                    <input type="number" data-id="{{object.id}}" name="delivery-cost" value="{{object.delivery_cost|default:0}}" id="delivery-cost">
+                                    <input type="number" data-id="{{object.id}}" name="delivery-cost" value="{{object.delivery_cost.normalize|default:0}}" id="delivery-cost">
                                 </td>
                             </tr>
                             <tr class="text-end">
@@ -145,7 +146,7 @@
                                     Grand Total
                                 </td>
                                 <td >
-                                    <input type="number" value="{{object.total|default:0}}" id="grand-total" name="total"  >
+                                    <input type="number" value="{{object.total.normalize|intcomma|default:0}}" id="grand-total" name="total"  >
                                 </td>
                             </tr>
                             <tr class="text-end">
@@ -212,6 +213,8 @@
             let disc = sub * ($(this).find('.discount').val()/100);
             if(isNaN(sub) == false && isNaN(disc)==false){
                 $(this).find('.total').text(sub-disc);
+                $(this).find('.total').data('total', sub-disc);
+                console.log('calculate st')
                 calculateSubTotal();
             }
             
@@ -221,10 +224,12 @@
         function calculateSubTotal(){
             let _subTotal = 0;
             $('.total').each(function(){
-                _subTotal += parseFloat($(this).text());
+                _subTotal += parseFloat($(this).data('total'));
                 if(isNaN(_subTotal)==false){
-                    $('#sub-total').text(_subTotal);
-                    subTotal = _subTotal;
+                    
+                    subTotal = _subTotal ;
+                    console.log('update st ' + _subTotal )
+                    $('#sub-total').text(new Intl.NumberFormat().format(_subTotal));
                 }
                 
             })
@@ -233,10 +238,11 @@
         }
 
         function calculateDiscountAmount(el){
-            let sub = $('#sub-total').text();
+            let sub = parseFloat($('#sub-total').text().replace(/,/g, ''));
+            console.log(sub)
             let _discountAmount = sub * ($(el).val()/100);
-            $('#discount-amount').text(_discountAmount); 
-            $('#base-total').text(sub - _discountAmount);
+            $('#discount-amount').text(new Intl.NumberFormat().format(_discountAmount)); 
+            $('#base-total').text(new Intl.NumberFormat().format(sub - _discountAmount));
             discountAmount = _discountAmount;
             calculateGrandTotal();
         }
@@ -246,11 +252,10 @@
         })
 
         function calculateSalesTax(el){
-            let baseAmount = parseFloat($('#base-total').text());
+            let baseAmount = parseFloat($('#base-total').text().replace(/,/g, ''));
             let _salesTaxAmount = (parseFloat($(el).val())/100) * baseAmount;
-            console.log(_salesTaxAmount);
             if(isNaN(_salesTaxAmount)==false){
-                $('#sales-tax-amount').text(_salesTaxAmount);
+                $('#sales-tax-amount').text(new Intl.NumberFormat().format(_salesTaxAmount));
             }
             salesTaxAmount = _salesTaxAmount;
             calculateGrandTotal()
