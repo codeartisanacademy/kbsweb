@@ -41,6 +41,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
+                                        <th>Roles</th>
                                         <th>Email</th>
                                     </tr>
                                 </thead>
@@ -50,6 +51,7 @@
                                           <tr>
                                               <td>{{forloop.counter}}</td>
                                               <td>{{u.first_name|default:""}} {{u.last_name|default:""}}</td>
+                                              <td>{{u.groups.all|join:", "}}</td>
                                               <td>{{u.email}}</td>
                                           </tr>  
                                     {% endfor %}

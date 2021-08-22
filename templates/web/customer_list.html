@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load groups_tags %}
 
 
 {% block breadcrumb %}
@@ -42,7 +43,7 @@
                         <td>{{object.phone}}</td>
                         <td>{{object.email}}</td>
                         <td>{{object.city}}</td>
-                        <td><a href="{% url 'customers-update' object.id %}">Edit</a> - <a href="{% url 'customers-delete' object.id %}">Delete</a></td>
+                        <td><a href="{% url 'customers-update' object.id %}">Edit</a> {% if request.user|is_admin %}- <a href="{% url 'customers-delete' object.id %}">Delete</a>{%endif%}</td>
                     </tr>
                 {% endfor %}
                     

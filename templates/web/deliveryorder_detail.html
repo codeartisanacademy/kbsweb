@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{% url 'delivery-orders' %}">Surat Jalan</a></li>
 <li class="breadcrumb-item">{{object}}</li>
@@ -89,7 +90,7 @@
                                 <tr>
                                     <td>{{forloop.counter}}</td>
                                     <td>{{p.quantity}} {{p.metric_type}} {{p.name}} @ {{p.unit_quantity}} {{p.unit_metric}}</td>
-                                    <td>{{p.total}}</td>
+                                    <td>{{p.total|intcomma}} {{p.unit_metric}}</td>
                                     <td>
                                         <form action="{% url 'do-product-delete' p.id%}" method="post">
                                             {% csrf_token %}

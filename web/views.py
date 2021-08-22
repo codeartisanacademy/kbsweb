@@ -8,6 +8,8 @@ from django.urls import reverse_lazy
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group
+
 from .forms import UserForm
 import json
 from .models import Customer, Sales, Category, DeliveryOrder, Product, Invoice, InvoiceItem
@@ -261,7 +263,10 @@ class UserCreateView(LoginRequiredMixin, TemplateView):
     def post(self, request):
         form = UserForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_user = form.save()
+            group_id = form.cleaned_data["groups"].first().id
+            group = Group.objects.get(id=group_id) 
+            new_user.groups.add(group)
             return HttpResponseRedirect(reverse('users'))
 
 class RevenueListView(LoginRequiredMixin, ListView):

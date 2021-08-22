@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load groups_tags %}
 
 
 {% block breadcrumb %}
@@ -38,7 +39,7 @@
                         <td>{{object.customer}}</td>
                         <td>{{object.delivery_order_date}}</td>
                         <td>{{object.sales}}</td>
-                        <td><a href="{% url 'delivery-order-detail' object.id %}">View Detail</a> - <a href="{% url 'delivery-order-delete' object.id %}">Delete</a></td>
+                        <td><a href="{% url 'delivery-order-detail' object.id %}">View Detail</a> {% if request.user|is_admin %}- <a href="{% url 'delivery-order-delete' object.id %}">Delete</a>{%endif%}</td>
                     </tr>
                 {% endfor %}
                     
