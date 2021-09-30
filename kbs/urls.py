@@ -48,6 +48,7 @@ urlpatterns = [
     path('invoice_item/update/', views.update_invoice_item, name="invoice-item-update"),
     path('users/', views.UserListView.as_view(), name="users"),
     path('users/add/', views.UserCreateView.as_view(), name="users-create"),
+    path('users/<int:pk>/delete/', views.UserDeleteView.as_view(), name="user-delete"),
     path('revenues/', views.RevenueListView.as_view(), name="revenues"),
     path('invoice-report/', views.InvoiceReportListView.as_view(), name="invoice-report"),
     path('categories/', views.CategoryListView.as_view(), name="categories"),

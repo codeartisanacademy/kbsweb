@@ -43,6 +43,7 @@
                                         <th>Name</th>
                                         <th>Roles</th>
                                         <th>Email</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -53,6 +54,12 @@
                                               <td>{{u.first_name|default:""}} {{u.last_name|default:""}}</td>
                                               <td>{{u.groups.all|join:", "}}</td>
                                               <td>{{u.email}}</td>
+                                              <td>
+                                                  <form action="{% url 'user-delete' u.id %}" method="post">
+                                                      {% csrf_token %}
+                                                      <button type="submit" class="btn btn-warning">Delete</button>
+                                                  </form>
+                                              </td>
                                           </tr>  
                                     {% endfor %}
                                         

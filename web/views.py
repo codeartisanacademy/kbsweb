@@ -268,6 +268,12 @@ class UserCreateView(LoginRequiredMixin, TemplateView):
             group = Group.objects.get(id=group_id) 
             new_user.groups.add(group)
             return HttpResponseRedirect(reverse('users'))
+        else:
+            return render(request, self.template_name, {'form':form})
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    success_url = reverse_lazy('users')
 
 class RevenueListView(LoginRequiredMixin, ListView):
     model = Invoice
